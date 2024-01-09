@@ -1,25 +1,51 @@
 "use client";
-
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [user, setUser] = React.useState({
     email: "",
     password: "",
   });
 
-  const onLogIn = async () => {};
+  const [buttonDisable, setButtonDisable] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+
+  const onLogIn = async () => {
+    try {
+      setLoading(true);
+
+      const response = await axios.post("/api/users/login", user);
+      console.log("login successful", response.data);
+      toast.success("Login Success");
+      router.push(`/profile/${user.email}`);
+    } catch (error: any) {
+      console.log("Login Failed", error.message);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    if (user.email.length > 0 && user.password.length > 0) {
+      setButtonDisable(false);
+    } else {
+      setButtonDisable(true);
+    }
+  }, [user]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1>LOG IN</h1>
+      <h1>{loading ? "Signing In" : "Log In"}</h1>
       <hr />
       <label htmlFor="email">Email</label>
       <input
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-double focus:border-gray-300"
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-double focus:border-gray-300 text-black"
         id="email"
         type="text"
         placeholder="Email"
@@ -28,7 +54,7 @@ export default function LoginPage() {
       />
       <label htmlFor="password">Password</label>
       <input
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-double focus:border-gray-300"
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-double focus:border-gray-300 text-black"
         id="password"
         type="password"
         placeholder="Password"
@@ -39,7 +65,7 @@ export default function LoginPage() {
         onClick={onLogIn}
         className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
       >
-        Log In
+        {buttonDisable ? "No Sign In" : "Sign In"}
       </button>
       <p>
         Don`t have an account

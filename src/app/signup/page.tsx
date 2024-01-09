@@ -82,7 +82,7 @@ export default function SignUpPage() {
       <p>
         Already have an account{" "}
         <Link
-          className="p-3 border-collapse border-cyan-300 focus:border-cyan-300"
+          className="p-2 ml-2 border-collapse bg-white text-black rounded-lg"
           href="/login"
         >
           Login Here
