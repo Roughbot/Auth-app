@@ -42,10 +42,10 @@ export default function LoginPage() {
         Log In
       </button>
       <p>
-        Dont have an account{" "}
+        Don`t have an account
         <Link
           className="p-3 border-collapse border-cyan-300 focus:border-cyan-300"
-          href="/login"
+          href="/signup"
         >
           Sign up Here
         </Link>
