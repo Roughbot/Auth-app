@@ -1,12 +1,33 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function ResetPassword() {
+  const router = useRouter();
+  const [token, setToken] = useState("");
+  const [loading, setLoading] = useState(false);
   const [newPassword, setNewPassword] = useState({
     password: "",
     confirmPassword: "",
   });
-  const resetFunction = () => {};
+  const resetFunction = async () => {
+    try {
+      const response = await axios.post("/api/users/resetpassword", {
+        password: newPassword,
+        token: token,
+      });
+      router.push("/login");
+    } catch (error: any) {
+      console.log("Password reset Error", error.message);
+      toast.error(error.message);
+    }
+  };
+  useEffect(() => {
+    const urlToken = window.location.search.split("=")[1];
+    setToken(urlToken || "");
+  }, []);
 
   return (
     <div>
@@ -55,7 +76,7 @@ export default function ResetPassword() {
             onClick={resetFunction}
             className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
           >
-            Reset
+            {loading ? "Reseting" : "Reset"}
           </button>
         </div>
       </div>

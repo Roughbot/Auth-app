@@ -1,13 +1,15 @@
 "use client";
+import { sendEmail } from "@/helpers/mailer";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const [data, setData] = React.useState("nothing");
+  const [data, setData] = useState("nothing");
+  const [email, setEmail] = useState("");
   const [userName, setUserName] = React.useState(null);
 
   React.useEffect(() => {
@@ -36,6 +38,7 @@ export default function ProfilePage() {
   const getUserDetails = async () => {
     const res: any = await axios.get("/api/users/me");
     setData(res.data.data._id);
+    setEmail(res.data.data.email);
   };
 
   return (
@@ -44,12 +47,16 @@ export default function ProfilePage() {
       <hr />
       {userName && <h1>{userName}&#39;s Page</h1>}
       <h2 className="p-1 rounded bg-purple-600 mt-3">
+        User-Id:{" "}
         {data === "nothing" ? (
           "Nothing"
         ) : (
           <Link href={`/profile/${data}`}>{data}</Link>
         )}
       </h2>
+      {email && (
+        <h3 className="mt-3 p-1 rounded text-black bg-yellow-200 ">{email}</h3>
+      )}
       <hr />
 
       <button
