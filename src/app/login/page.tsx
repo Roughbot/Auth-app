@@ -94,7 +94,7 @@ export default function LoginPage() {
         <div className="mt-4 text-center">
           <Link
             className="text-blue-500 hover:text-blue-700 "
-            href="/forgotPassword"
+            href="/forgotpassword"
           >
             Reset Password
           </Link>
